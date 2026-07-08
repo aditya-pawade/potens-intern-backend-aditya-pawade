@@ -213,8 +213,7 @@ public class DataLoader implements CommandLineRunner {
                 "18", null, null, 10, true, "Must be at least 18 years old"));
         scheme.addRule(rule(ProfileAttribute.ANNUAL_INCOME, RuleType.MAX_VALUE,
                 "1000000", null, null, 20, false, "Priority for lower-income entrepreneurs"));
-        scheme.addRule(rule(ProfileAttribute.EDUCATION_LEVEL, RuleType.MIN_VALUE,
-                "0", null, null, 5, false, "Open to all education levels"));
+
 
         schemeRepository.save(scheme);
     }

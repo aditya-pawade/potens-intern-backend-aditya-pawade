@@ -78,20 +78,19 @@ Interactive Swagger documentation is available at:
 3. **No MapStruct**: Mappers are manually written for better interview explainability and to avoid annotation magic.
 4. **Consistent Error Handling**: `GlobalExceptionHandler`, `JwtAuthenticationEntryPoint`, and `CustomAccessDeniedHandler` all return a unified JSON `ErrorResponse`.
 
-## What is Broken or Unfinished
-* **Broken**: Nothing is functionally broken. The test suite passes 100% and all edge cases (404, 409, 401, 403) are gracefully handled.
-* **Unfinished / Out of Scope**: 
-    - The API currently lacks an endpoint for users to self-register (only seeded users exist).
-    - Hardcoded JWT Secret in `application.properties` (should be injected via environment variables in production).
-    - Rate limiting is not currently implemented on the `/api/recommend` endpoint.
+## Stretch Goals & What is Unfinished
+* **OpenAPI Spec (Completed)**: I successfully implemented the OpenAPI stretch goal. Auto-generated Swagger documentation is available at `/v3/api-docs` and a UI at `/swagger-ui/index.html`.
+* **Caching Layer (Unfinished)**: I did not implement the caching stretch goal for the `/recommend` endpoint. 
+    * *What I would have done*: I would integrate Spring Boot `@EnableCaching` with Redis. Since scheme eligibility rules change infrequently, caching the scheme list in Redis (with a TTL of 24 hours) would prevent the engine from hitting the MySQL database on every single recommendation request.
+* **Webhook Subscription (Unfinished)**: I did not implement the `/subscribe` webhook stretch goal.
+    * *What I would have done*: I would create a new `Subscription` entity linked to an `AppUser` containing a JSON payload of their profile. When a new scheme is created via `POST /api/admin/schemes`, an async Spring `@EventListener` or Kafka producer would trigger a background job to run the recommendation engine against all saved subscriptions, firing an HTTP POST request via Spring `WebClient` to any webhooks that match the new scheme.
 
 ## What I Would Build Next
 1. **Typed Rule Values**: Refactor the rule engine to use strongly-typed values (`Integer`, `Double`, `Boolean`) instead of parsing strings during evaluation for better performance.
 2. **User Registration & Profile Persistence**: Allow users to create accounts, save their profiles, and retrieve saved scheme recommendations later.
-3. **Caching**: Implement Redis caching for the `/api/admin/schemes` endpoints, as government schemes rarely change on a minute-by-minute basis.
-4. **Rate Limiting**: Implement Bucket4j to rate-limit the unauthenticated `/api/recommend` endpoint to prevent abuse.
+3. **Rate Limiting**: Implement Bucket4j to rate-limit the unauthenticated `/api/recommend` endpoint to prevent abuse.
 
 ## AI USE LOG
 * **Tool used**: Google DeepMind Agent (Antigravity IDE)
-* **Approximate usage**: 1 continuous agentic session (~50 messages).
-* **What I used it for**: Pair-programming to architect the domain model, generate boilerplate Spring Boot CRUD logic, configure the Spring Security 5.7 JWT filter chain, and write the 29-test automated test suite.
+* **Approximate usage**: 1 continuous agentic session (~55 messages/prompts).
+* **What I used it for**: Pair-programming to architect the domain model, write boilerplate Spring Boot CRUD logic, configure the Spring Security 5.7 JWT filter chain, and write the 29-test automated test suite. Heavy usage for syntax recall and testing boilerplate.

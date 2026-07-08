@@ -25,9 +25,9 @@ Built as an assessment for Potens IT Services.
 ### 1. Database Configuration
 The application expects a MySQL database running on **port 3307** with the following credentials:
 * **Host:** localhost
-* **Port:** 3307
-* **Username:** root
-* **Password:** root
+* **Port:** 3307 (my system)
+* **Username:** ur system db username
+* **Password:** ur system db password
 * **Database:** `scheme_db`
 
 Create the database before starting the application:
